@@ -1,0 +1,41 @@
+# --- Core ---
+anthropic==2.6.0
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+pydantic>=2.7
+pyyaml>=6.0
+sqlalchemy[asyncio]>=2.0.30
+aiosqlite>=0.20
+keyring>=25
+httpx>=0.27
+# --- Sistema / escritorio (Windows) ---
+psutil>=6.0
+nvidia-ml-py>=12.0
+pywin32>=306; sys_platform == "win32"
+send2trash>=1.8
+pyautogui>=0.9.54
+pygetwindow>=0.0.9
+pyperclip>=1.9
+winotify>=1.1; sys_platform == "win32"
+pystray>=0.19
+pillow>=10.0
+# --- Documentos ---
+pypdf>=4.0
+python-docx>=1.1
+openpyxl>=3.1
+fpdf2>=2.7
+# --- Web gratuita (modo local) ---
+ddgs>=9.0
+trafilatura>=2.0
+# --- Navegador ---
+playwright>=1.45
+# --- Telegram ---
+python-telegram-bot==22.8
+# --- Voz ---
+faster-whisper>=1.1
+av>=14,<16           # PyAV 16+ rompe faster-whisper 1.2 (instalar con --only-binary)
+openwakeword>=0.6
+edge-tts>=7.0
+sounddevice>=0.5     # micrófono/altavoces del asistente de voz permanente
+numpy>=1.26

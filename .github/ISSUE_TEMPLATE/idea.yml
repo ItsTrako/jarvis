@@ -1,0 +1,21 @@
+name: Proponer una mejora
+description: Una idea, herramienta o integración nueva.
+labels: ["mejora"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qué necesitas
+      description: El problema o la situación que te gustaría resolver.
+    validations:
+      required: true
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Cómo te lo imaginas
+      description: Qué le dirías a JARVIS y qué debería hacer.
+  - type: dropdown
+    id: riesgo
+    attributes:
+      label: ¿Modifica datos o el sistema?
+      options: ["No, solo consulta", "Sí, de forma reversible", "Sí, de forma irreversible"]

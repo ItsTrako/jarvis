@@ -1,0 +1,26 @@
+# Entorno y dependencias (se crean en cada PC con INSTALAR.cmd)
+.venv/
+frontend/node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Datos personales y de este equipo: NUNCA al repositorio
+# (memoria, conversaciones, registros, modelos descargados, token de sesión)
+data/
+
+# Paquetes exportados (contienen tu memoria)
+exportar/
+
+# La interfaz compilada (frontend/dist) SÍ se sube: así el otro PC no necesita Node.js
+
+# Perfil personal (nombre, ajustes): solo para tus PCs, no para el repositorio público
+perfil/
+
+# Web: las imágenes las copia el workflow desde .github/assets
+site/img/
+site/_*.html
+.claude/
+
+# Material para redes sociales
+publicacion/

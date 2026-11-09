@@ -1,0 +1,3 @@
+# Solo para equipos con GPU NVIDIA: acelera el reconocimiento de voz (Whisper) con CUDA
+nvidia-cublas-cu12
+nvidia-cudnn-cu12==9.*

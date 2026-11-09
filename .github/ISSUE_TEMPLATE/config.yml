@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Vulnerabilidad de seguridad
+    url: https://github.com/ItsTrako/jarvis/security/advisories/new
+    about: Infórmala de forma privada, nunca en una issue pública.
+  - name: Documentación
+    url: https://github.com/ItsTrako/jarvis/tree/main/docs
+    about: Instalación, voz, Telegram, IA local y seguridad.
