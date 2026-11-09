@@ -5,6 +5,32 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/* Textos por idioma: la página inglesa (en/) tiene <html lang="en"> */
+const EN = document.documentElement.lang.startsWith("en");
+const T = EN ? {
+  states: { idle: "Idle", listening: "Listening", thinking: "Thinking", speaking: "Speaking" },
+  script: [
+    ["Hey JARVIS, what's on my list today?", "Three things. Most urgent: renew the domain."],
+    ["Open Spotify and play something to focus.", "Done. Calm music playing on Spotify."],
+    ["How's the GPU doing?", "21 % load and 58 °C. All good."],
+    ["Write me a report on Notion alternatives.", "On it. I'll let you know when it's ready."],
+  ],
+  notes: { local: "gemma4:12b · qwen3:8b · $0 a month", claude: "claude-opus-5-5 · adaptive reasoning" },
+  titles: { inicio: "Home", "motor-ia": "AI engine", voces: "Voices", sistema: "System", herramientas: "Tools" },
+  copy: "Copy", copied: "Copied", kill: "Emergency stop", killed: "Everything stopped",
+} : {
+  states: { idle: "En espera", listening: "Escuchando", thinking: "Pensando", speaking: "Hablando" },
+  script: [
+    ["Hey JARVIS, ¿qué tengo pendiente hoy?", "Tres cosas. La más urgente: renovar el dominio."],
+    ["Abre Spotify y pon algo para concentrarme.", "Hecho. Música tranquila sonando en Spotify."],
+    ["¿Cómo va la GPU?", "Al 21 % y a 58 °C. Todo en orden."],
+    ["Prepárame un informe de alternativas a Notion.", "Me pongo con ello. Te aviso al terminar."],
+  ],
+  notes: { local: "gemma4:12b · qwen3:8b · 0 € al mes", claude: "claude-opus-5-5 · razonamiento adaptativo" },
+  titles: { inicio: "Inicio", "motor-ia": "Motor de IA", voces: "Voces", sistema: "Sistema", herramientas: "Herramientas" },
+  copy: "Copiar", copied: "Copiado", kill: "Parada de emergencia", killed: "Todo detenido",
+};
+
 /* Aparición al hacer scroll */
 const io = new IntersectionObserver((entries) => {
   for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
@@ -19,17 +45,12 @@ onScroll();
 
 /* Núcleo + diálogo de demostración: escucha, piensa y habla en bucle */
 const STATES = {
-  idle: ["En espera", "#6ee7b7"],
-  listening: ["Escuchando", "#a855f7"],
-  thinking: ["Pensando", "#c4b5fd"],
-  speaking: ["Hablando", "#a855f7"],
+  idle: [T.states.idle, "#6ee7b7"],
+  listening: [T.states.listening, "#a855f7"],
+  thinking: [T.states.thinking, "#c4b5fd"],
+  speaking: [T.states.speaking, "#a855f7"],
 };
-const SCRIPT = [
-  ["Hey JARVIS, ¿qué tengo pendiente hoy?", "Tres cosas. La más urgente: renovar el dominio."],
-  ["Abre Spotify y pon algo para concentrarme.", "Hecho. Música tranquila sonando en Spotify."],
-  ["¿Cómo va la GPU?", "Al 21 % y a 58 °C. Todo en orden."],
-  ["Prepárame un informe de alternativas a Notion.", "Me pongo con ello. Te aviso al terminar."],
-];
+const SCRIPT = T.script;
 
 let orb = null;
 // El núcleo anima en su sitio (sin desplazamiento), así que se mantiene también con movimiento reducido
@@ -76,7 +97,7 @@ $("#orbWrap").addEventListener("click", () => skip?.());
 
 /* Selector de motor de IA */
 const engines = $(".engines");
-const NOTES = { local: "gemma4:12b · qwen3:8b · 0 € al mes", claude: "claude-opus-5-5 · razonamiento adaptativo" };
+const NOTES = T.notes;
 $$(".engine", engines).forEach((b) => b.addEventListener("click", () => {
   engines.dataset.on = b.dataset.engine;
   $$(".engine", engines).forEach((x) => x.classList.toggle("on", x === b));
@@ -118,7 +139,7 @@ $$(".tile").forEach((t) => t.addEventListener("pointermove", (e) => {
 }));
 
 /* Galería de pantallas */
-const TITLES = { inicio: "Inicio", "motor-ia": "Motor de IA", voces: "Voces", sistema: "Sistema", herramientas: "Herramientas" };
+const TITLES = T.titles;
 const tabs = $$(".tabs [role=tab]");
 function show(name) {
   tabs.forEach((b) => b.setAttribute("aria-selected", String(b.dataset.shot === name)));
@@ -138,13 +159,13 @@ tabs.forEach((b, i) => {
 $$(".copy").forEach((b) => b.addEventListener("click", async () => {
   const text = $("#" + b.dataset.copy).innerText.split("\n").filter((l) => l && !l.startsWith("#")).join("\n");
   try { await navigator.clipboard.writeText(text); } catch { return; }
-  b.classList.add("ok"); $("span", b).textContent = "Copiado"; $("i", b).className = "ph ph-check";
-  setTimeout(() => { b.classList.remove("ok"); $("span", b).textContent = "Copiar"; $("i", b).className = "ph ph-copy"; }, 1800);
+  b.classList.add("ok"); $("span", b).textContent = T.copied; $("i", b).className = "ph ph-check";
+  setTimeout(() => { b.classList.remove("ok"); $("span", b).textContent = T.copy; $("i", b).className = "ph ph-copy"; }, 1800);
 }));
 
 /* Parada de emergencia (demostración) */
 const kill = $("#kill");
 kill.addEventListener("click", () => {
-  kill.classList.add("fired"); $("span", kill).textContent = "Todo detenido";
-  setTimeout(() => { kill.classList.remove("fired"); $("span", kill).textContent = "Parada de emergencia"; }, 1800);
+  kill.classList.add("fired"); $("span", kill).textContent = T.killed;
+  setTimeout(() => { kill.classList.remove("fired"); $("span", kill).textContent = T.kill; }, 1800);
 });

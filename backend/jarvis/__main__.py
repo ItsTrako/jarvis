@@ -54,8 +54,10 @@ def open_ui() -> None:
     cfg = get_config().server
     url = f"http://127.0.0.1:{cfg.port}/"
     if cfg.app_window:
-        from .system_integration import find_chromium
+        from .system_integration import find_chromium, focus_app_window
 
+        if focus_app_window():  # una sola ventana: si ya está abierta, se trae al frente
+            return
         browser = find_chromium()
         if browser:
             profile = DATA_DIR / "app-window"

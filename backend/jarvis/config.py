@@ -148,6 +148,9 @@ class UserConfig(BaseModel):
     name: str = ""
     language: str = "es"
     timezone: str = "Europe/Madrid"
+    city: str = ""              # vacío: se detecta sola por la conexión (auto_location)
+    auto_location: bool = True  # ubicación aproximada por IP para el tiempo y lo cercano
+    auto_learn: bool = True     # aprende datos sobre ti de las conversaciones y los guarda en memoria
 
 
 class AppConfig(BaseModel):

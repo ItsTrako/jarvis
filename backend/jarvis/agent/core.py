@@ -14,7 +14,7 @@ from typing import Any
 
 import anthropic
 
-from .. import db, store
+from .. import db, store, userinfo
 from ..config import get_config
 from ..events import bus
 from ..llm import get_provider
@@ -115,6 +115,10 @@ class Agent:
         ]
         if cfg.user.name:
             lines.append(f"Nombre del usuario: {cfg.user.name}")
+        try:
+            lines += await userinfo.context_lines()
+        except Exception:
+            log.debug("Perfil del usuario no disponible", exc_info=True)
         mem = await store.memory_context(text)
         if mem:
             lines.append("Recuerdos relevantes (memoria persistente):\n" + mem)
@@ -241,6 +245,10 @@ class Agent:
             await self._close_pending(cid, segment, pending_tool_ids, ctx, "Interrumpido por un error interno.")
 
         result.files = list(dict.fromkeys(ctx.files_out))
+        if not (result.error or result.stopped):
+            from . import learn  # aprende datos duraderos del usuario en segundo plano
+
+            learn.schedule(plain, result.text, ctx.source)
         bus.publish("run_end", conversation_id=cid, text=result.text, files=result.files, error=result.error,
                     stopped=result.stopped, job_id=ctx.job_id, source=ctx.source)
         await self._maybe_compact(cid)

@@ -1,5 +1,5 @@
 import {
-  CheckCircle2, CircleAlert, FolderPlus, KeyRound, Loader2, Mic, RefreshCw, Send, Shield, Sparkles, Stethoscope, Trash2, X,
+  CheckCircle2, CircleAlert, FolderPlus, KeyRound, Loader2, MapPin, Mic, RefreshCw, Send, Shield, Sparkles, Stethoscope, Trash2, UserRound, X,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { del, get, patch, post, put } from "../lib/api";
@@ -19,6 +19,36 @@ const TABS: { id: Tab; label: string; icon: ReactNode }[] = [
   { id: "security", label: "Seguridad", icon: <Shield size={15} /> },
   { id: "system", label: "Sistema", icon: <Stethoscope size={15} /> },
 ];
+
+function AboutYou({ cfg, save }: { cfg: any; save: (p: any) => Promise<void> | void }) {
+  const [info, setInfo] = useState<any>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { get("/api/userinfo").then(setInfo).catch(() => undefined); }, [cfg.user.city]);
+  const det = info?.perfil?.ubicacion;
+  const detected = det ? [det.ciudad, det.region, det.pais].filter(Boolean).join(", ") : "";
+  return (
+    <Panel title="Sobre ti" icon={<UserRound size={14} />}>
+      <Row label="Tu nombre" hint="Cómo te llama JARVIS.">
+        <Input defaultValue={cfg.user.name} onBlur={(e) => save({ user: { name: e.target.value } })} placeholder="Tu nombre" />
+      </Row>
+      <Row label="Tu ciudad" hint={detected ? <>Vacío = automática. Detectada ahora: <b className="text-ink/90">{detected}</b> (aproximada, por la conexión).</> : "Vacío = se detecta sola por la conexión."}>
+        <div className="flex gap-2">
+          <Input defaultValue={cfg.user.city} onBlur={(e) => save({ user: { city: e.target.value.trim() } })} placeholder={detected || "Automática"} />
+          <Button variant="ghost" title="Volver a detectar" disabled={busy}
+            onClick={async () => { setBusy(true); try { setInfo(await post("/api/userinfo/refresh")); } finally { setBusy(false); } }}>
+            {busy ? <Loader2 size={15} className="animate-spin" /> : <MapPin size={15} />}
+          </Button>
+        </div>
+      </Row>
+      <Row label="Ubicación automática" hint="Usa tu ubicación aproximada para el tiempo y lo cercano, sin preguntarte.">
+        <Toggle checked={cfg.user.auto_location} onChange={(v) => save({ user: { auto_location: v } })} />
+      </Row>
+      <Row label="Aprender sobre ti" hint="Guarda en memoria lo que vaya sabiendo de ti (gustos, trabajo, gente, proyectos) para no volver a preguntarte. Lo puedes revisar y borrar en Memoria.">
+        <Toggle checked={cfg.user.auto_learn} onChange={(v) => save({ user: { auto_learn: v } })} />
+      </Row>
+    </Panel>
+  );
+}
 
 function Row({ label, hint, children }: { label: string; hint?: ReactNode; children: ReactNode }) {
   return (
@@ -123,11 +153,9 @@ export function Settings() {
 
         {tab === "model" && (
           <div className="space-y-6">
+          <AboutYou cfg={cfg} save={save} />
           <AIEngine />
           <Panel title="Claude · nube" icon={<Sparkles size={14} />}>
-            <Row label="Tu nombre" hint="Cómo te llama JARVIS.">
-              <Input defaultValue={cfg.user.name} onBlur={(e) => save({ user: { name: e.target.value } })} placeholder="Tu nombre" />
-            </Row>
             <Row label="Modelo de Claude" hint="Opus 5.5: el más capaz. Haiku 5.5: casi gratis (~40 veces más barato).">
               <Select value={cfg.llm.model} onChange={(m) => save({ llm: { model: m } })} options={[
                 { value: "claude-opus-5-5", label: "Claude Opus 5.5 (recomendado)" },

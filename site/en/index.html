@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>J.A.R.V.I.S. · Personal AI assistant for Windows</title>
+<meta name="description" content="A personal AI assistant for Windows with always-on voice, memory and full control of your PC. Free and local with Ollama, or with Claude. Open source.">
+<meta name="theme-color" content="#08060d">
+<meta property="og:type" content="website">
+<meta property="og:title" content="J.A.R.V.I.S. · Personal AI assistant for Windows">
+<meta property="og:description" content="Always-on voice, memory and full control of your PC. Free and local, or with Claude.">
+<meta property="og:image" content="https://itstrako.github.io/jarvis/img/social-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="../img/icono.png">
+<link rel="alternate" hreflang="es" href="https://itstrako.github.io/jarvis/">
+<link rel="alternate" hreflang="en" href="https://itstrako.github.io/jarvis/en/">
+<link rel="preload" href="../fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="../styles.css?v=6">
+<script>document.documentElement.classList.add("js");setTimeout(function(){if(!window.jarvisReady)document.documentElement.classList.remove("js")},2500)</script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#" aria-label="J.A.R.V.I.S., home"><span class="brand-dot"></span>J.A.R.V.I.S.</a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#features">Features</a>
+    <a href="#screens">Interface</a>
+    <a href="#security">Security</a>
+    <a href="#install">Install</a>
+  </nav>
+  <div class="lang" role="group" aria-label="Language"><a href="../" hreflang="es" lang="es">ES</a><a aria-current="true" href="./">EN</a></div>
+  <a class="btn btn-ghost btn-sm" href="https://github.com/ItsTrako/jarvis"><i class="ph ph-github-logo"></i>GitHub</a>
+</header>
+
+<main id="content">
+  <section class="hero">
+    <div class="hero-copy">
+      <h1 class="reveal" style="--d:.05s"><span class="line">Talk to your PC.</span><span class="line grad">It does the rest.</span></h1>
+      <p class="lead reveal" style="--d:.18s">An AI assistant for Windows with always-on voice, memory and full control. Free and local, or with Claude.</p>
+      <div class="cta reveal" style="--d:.3s">
+        <a class="btn btn-primary" href="#install"><i class="ph ph-download-simple"></i>Install on Windows</a>
+        <a class="btn btn-ghost" href="https://github.com/ItsTrako/jarvis/blob/main/README.en.md"><i class="ph ph-github-logo"></i>View the code</a>
+      </div>
+      <ul class="hero-facts reveal" style="--d:.42s">
+        <li><i class="ph ph-microphone"></i>"Hey JARVIS", 24/7</li>
+        <li><i class="ph ph-cpu"></i>Local AI on your GPU</li>
+        <li><i class="ph ph-telegram-logo"></i>From your phone too</li>
+      </ul>
+    </div>
+
+    <div class="hero-stage reveal" style="--d:.1s">
+      <div class="orb-wrap" id="orbWrap">
+        <canvas id="orb" aria-label="Animated JARVIS core" role="img"></canvas>
+        <img class="orb-fallback" src="../img/nucleo.png" alt="" hidden>
+      </div>
+      <div class="dialog" aria-live="polite">
+        <div class="bubble you" id="bYou"><i class="ph ph-user"></i><span id="tYou"></span></div>
+        <div class="bubble jarvis" id="bJarvis"><i class="ph-fill ph-sparkle"></i><span id="tJarvis"></span></div>
+      </div>
+      <div class="state-chip"><span class="dot" id="stateDot"></span><span id="stateLabel">Idle</span></div>
+    </div>
+  </section>
+
+  <section class="showcase">
+    <figure class="window tilt">
+      <div class="window-bar"><span></span><span></span><span></span><em>127.0.0.1:8765</em></div>
+      <img src="../img/conversacion.webp" width="2000" height="1250" alt="JARVIS interface: a conversation with a completed four-step plan, web search, a verified Word document and a comparison table">
+    </figure>
+    <p class="caption">A real request: a visible plan, web search, a document written and checked. No made-up results. (The app speaks Spanish.)</p>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section-head reveal">
+      <h2>An assistant that acts, not just answers.</h2>
+      <p>The same brain, the same memory and the same permissions on your PC, by voice and on Telegram.</p>
+    </div>
+
+    <div class="bento">
+      <article class="tile t-voice reveal">
+        <div class="tile-copy">
+          <i class="ph ph-waveform tile-ic"></i>
+          <h3>Hands-free conversation</h3>
+          <p>Say "Hey JARVIS" and just talk, even with the window minimized. Whisper transcribes on your GPU and the voice starts speaking while the text is still being written. Interrupt it and it stops to listen.</p>
+        </div>
+        <div class="wave" aria-hidden="true"></div>
+      </article>
+
+      <article class="tile t-brain reveal" style="--d:.06s">
+        <i class="ph ph-brain tile-ic"></i>
+        <h3>Two brains, your call</h3>
+        <p>Claude Opus for maximum intelligence, or Gemma and Qwen on your own GPU: free, private and offline.</p>
+        <div class="engines" role="group" aria-label="AI engine">
+          <button class="engine on" type="button" data-engine="local"><i class="ph ph-hard-drives"></i>Local</button>
+          <button class="engine" type="button" data-engine="claude"><i class="ph ph-cloud"></i>Claude</button>
+          <span class="engine-pill" aria-hidden="true"></span>
+        </div>
+        <p class="engine-note mono" id="engineNote">gemma4:12b · qwen3:8b · $0 a month</p>
+      </article>
+
+      <article class="tile t-tools reveal">
+        <i class="ph ph-terminal-window tile-ic"></i>
+        <h3>Real control of your computer</h3>
+        <p>More than 50 tools with risk levels and logging: files, apps, windows, Word and PDF documents, browser, desktop and console.</p>
+        <div class="marquee" aria-hidden="true">
+          <div class="track mono">
+            <span>open_application</span><span>create_document</span><span>organize_folder</span><span>web_search</span><span>list_processes</span><span>desktop_actions</span><span>read_file</span><span>send_notification</span><span>run_command</span><span>web_fetch</span><span>file_info</span><span>update_plan</span>
+            <span>open_application</span><span>create_document</span><span>organize_folder</span><span>web_search</span><span>list_processes</span><span>desktop_actions</span><span>read_file</span><span>send_notification</span><span>run_command</span><span>web_fetch</span><span>file_info</span><span>update_plan</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="tile t-plan reveal" style="--d:.06s">
+        <i class="ph ph-list-checks tile-ic"></i>
+        <h3>Plans that get verified</h3>
+        <p>It breaks long requests into steps, checks every result and, if something fails, finds another way before answering.</p>
+        <ol class="plan" id="plan">
+          <li>Find current alternatives</li>
+          <li>Compare price and privacy</li>
+          <li>Write the report</li>
+          <li>Verify the document</li>
+        </ol>
+      </article>
+
+      <article class="tile t-phone reveal">
+        <div class="tile-copy">
+          <i class="ph ph-device-mobile tile-ic"></i>
+          <h3>Your PC in your pocket</h3>
+          <p>A private Telegram bot paired with your account. Ask for things from your phone and approve sensitive actions with your PIN.</p>
+        </div>
+        <img class="phone" src="../img/movil.webp" width="780" height="1688" loading="lazy" alt="JARVIS on a phone: greeting, animated core and quick actions">
+      </article>
+
+      <article class="tile t-memory reveal" style="--d:.06s">
+        <i class="ph ph-books tile-ic"></i>
+        <h3>Memory that matters</h3>
+        <p>It learns from what you tell it and remembers your preferences, tasks and projects. It knows where you are without asking. Everything stays on your machine.</p>
+        <ul class="memories">
+          <li><span class="tag mono">preference</span>Reports in Word, recommendation first</li>
+          <li><span class="tag mono">task</span>Prepare Friday's demo</li>
+        </ul>
+      </article>
+
+      <article class="tile t-desk reveal">
+        <i class="ph ph-monitor tile-ic"></i>
+        <h3>Lives on your desktop</h3>
+        <p>An animated core on your wallpaper that reacts as it listens, thinks and speaks. Plus a full-screen mode to keep it always in view.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="screens">
+    <div class="section-head reveal">
+      <h2>An interface built for everyday use.</h2>
+      <p>Every screen is a real capture of the app.</p>
+    </div>
+    <div class="tabs reveal" role="tablist" aria-label="App screens">
+      <button role="tab" aria-selected="true" data-shot="inicio">Home</button>
+      <button role="tab" aria-selected="false" data-shot="motor-ia">AI engine</button>
+      <button role="tab" aria-selected="false" data-shot="voces">Voices</button>
+      <button role="tab" aria-selected="false" data-shot="sistema">System</button>
+      <button role="tab" aria-selected="false" data-shot="herramientas">Tools</button>
+    </div>
+    <figure class="window gallery reveal" role="tabpanel">
+      <div class="window-bar"><span></span><span></span><span></span><em id="shotTitle">Home</em></div>
+      <div class="shots">
+        <img class="on" data-shot="inicio" src="../img/inicio.webp" width="2000" height="1250" loading="lazy" alt="Home screen with the core, greeting and system panel">
+        <img data-shot="motor-ia" src="../img/motor-ia.webp" width="2000" height="1250" loading="lazy" alt="AI engine settings: automatic, local or Claude">
+        <img data-shot="voces" src="../img/voces.webp" width="2000" height="1250" loading="lazy" alt="Neural voice gallery and microphone">
+        <img data-shot="sistema" src="../img/sistema.webp" width="2000" height="1250" loading="lazy" alt="System monitor: CPU, RAM, GPU, disks and processes">
+        <img data-shot="herramientas" src="../img/herramientas.webp" width="2000" height="1250" loading="lazy" alt="Tool catalog with risk levels">
+      </div>
+    </figure>
+  </section>
+
+  <section class="section security" id="security">
+    <div class="sec-copy reveal">
+      <span class="eyebrow mono">Security</span>
+      <h2>Powerful, with brakes.</h2>
+      <p>Every tool declares its risk level. Sensitive actions get confirmed, irreversible ones never happen silently, and an emergency stop is always one click away.</p>
+      <ul class="checks">
+        <li><i class="ph ph-key"></i>Credentials encrypted in Windows Credential Manager, never in the code.</li>
+        <li><i class="ph ph-shield-check"></i>Web pages, documents and external messages are treated as untrusted.</li>
+        <li><i class="ph ph-lock-key"></i>The interface only listens on 127.0.0.1 and Telegram requires pairing and a PIN.</li>
+        <li><i class="ph ph-hand-palm"></i>Never disables the antivirus or firewall, never keeps admin rights.</li>
+      </ul>
+    </div>
+    <div class="risk reveal" style="--d:.08s">
+      <div class="risk-row"><span class="lvl l1">safe</span><p>Read only. Runs without asking.</p></div>
+      <div class="risk-row"><span class="lvl l2">moderate</span><p>Reversible changes. Logged.</p></div>
+      <div class="risk-row"><span class="lvl l3">sensitive</span><p>Privacy or relevant changes. Asks first.</p></div>
+      <div class="risk-row"><span class="lvl l4">dangerous</span><p>Always needs explicit approval, with a PIN from Telegram.</p></div>
+      <button class="kill" type="button" id="kill"><i class="ph ph-power"></i><span>Emergency stop</span></button>
+    </div>
+  </section>
+
+  <section class="section install" id="install">
+    <div class="section-head reveal">
+      <h2>One command and you're running.</h2>
+      <p>The installer sets up Python, Ollama and the right models for your hardware. No administrator rights needed.</p>
+    </div>
+    <div class="install-grid">
+      <div class="code reveal">
+        <div class="code-bar"><span class="mono">PowerShell</span><button class="copy" type="button" data-copy="code1"><i class="ph ph-copy"></i><span>Copy</span></button></div>
+<pre class="mono" id="code1"><span class="c"># 1. Get the project</span>
+git clone https://github.com/ItsTrako/jarvis.git C:\JARVIS
+cd C:\JARVIS
+
+<span class="c"># 2. Install everything (or double-click INSTALAR.cmd)</span>
+.\INSTALAR.cmd
+
+<span class="c"># 3. Start it</span>
+.\Jarvis.cmd</pre>
+      </div>
+      <ol class="steps reveal" style="--d:.08s">
+        <li><b>Requirements</b><span>Windows 10 or 11. Recommended: 16 GB of RAM and an NVIDIA GPU for voice and local AI.</span></li>
+        <li><b>No Git?</b><span>Download the ZIP from GitHub, extract it to C:\JARVIS and open INSTALAR.cmd.</span></li>
+        <li><b>Claude, optional</b><span>It works for free from the start. Add your Anthropic key in the settings whenever you like.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="closing reveal">
+    <h2>Your assistant. Your machine. Your data.</h2>
+    <a class="btn btn-primary" href="https://github.com/ItsTrako/jarvis"><i class="ph-fill ph-star"></i>Star it on GitHub</a>
+  </section>
+</main>
+
+<footer class="footer">
+  <span class="brand"><span class="brand-dot"></span>J.A.R.V.I.S.</span>
+  <span>Open source under the MIT license.</span>
+  <nav aria-label="Links">
+    <a href="https://github.com/ItsTrako/jarvis/blob/main/README.en.md">Repository</a>
+    <a href="https://github.com/ItsTrako/jarvis/tree/main/docs">Docs (Spanish)</a>
+    <a href="https://github.com/ItsTrako/jarvis/issues">Issues</a>
+  </nav>
+</footer>
+
+<script type="module" src="../main.js?v=5"></script>
+</body>
+</html>

@@ -12,6 +12,62 @@ from typing import Any
 from .config import DATA_DIR, FRONTEND_DIST, PROJECT_ROOT, get_config
 from .secrets import has_secret
 
+def focus_app_window() -> bool:
+    """Si la ventana de JARVIS ya está abierta, la restaura y la trae al frente. Devuelve True si existía.
+
+    Se reconoce por su título y porque su navegador usa el perfil propio de JARVIS (data/app-window),
+    así nunca se confunde con una pestaña normal que tenga el mismo título.
+    """
+    try:
+        import psutil
+        import win32con
+        import win32gui
+        import win32process
+    except ImportError:
+        return False
+    profile = str(DATA_DIR / "app-window").lower()
+    found: list[int] = []
+
+    def visit(hwnd: int, _: Any) -> bool:
+        if not win32gui.IsWindowVisible(hwnd) or win32gui.GetClassName(hwnd) != "Chrome_WidgetWin_1":
+            return True
+        if not win32gui.GetWindowText(hwnd).startswith("J.A.R.V.I.S."):
+            return True
+        try:
+            pid = win32process.GetWindowThreadProcessId(hwnd)[1]
+            cmd = " ".join(psutil.Process(pid).cmdline()).lower()
+        except Exception:
+            return True
+        if profile in cmd.replace("/", "\\") or "app-window" in cmd:
+            found.append(hwnd)
+        return True
+
+    try:
+        win32gui.EnumWindows(visit, None)
+    except Exception:
+        return False
+    if not found:
+        return False
+    hwnd = found[0]
+    try:
+        if win32gui.IsIconic(hwnd):
+            win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+        else:
+            win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
+        try:
+            win32gui.SetForegroundWindow(hwnd)
+        except Exception:
+            # Windows bloquea el cambio de foco desde procesos en segundo plano: una pulsación de Alt lo permite
+            import win32api
+
+            win32api.keybd_event(0x12, 0, 0, 0)
+            win32api.keybd_event(0x12, 0, 2, 0)
+            win32gui.SetForegroundWindow(hwnd)
+    except Exception:
+        pass
+    return True
+
+
 STARTUP_DIR = Path(os.environ.get("APPDATA", "")) / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "Startup"
 SHORTCUT = STARTUP_DIR / "JARVIS.lnk"
 

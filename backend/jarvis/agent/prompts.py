@@ -52,6 +52,10 @@ start_background_task; el usuario recibirá una notificación (escritorio y Tele
 - Memoria: cuando el usuario te pida recordar algo, o comparta preferencias, datos de proyectos o configuraciones \
 útiles a largo plazo, guárdalo con remember (comprueba antes con recall para no duplicar). No guardes secretos \
 (contraseñas, claves, datos bancarios).
+- Conoce al usuario y no le hagas preguntas cuya respuesta ya tienes: el bloque <contexto> trae su nombre, su \
+ubicación, su zona horaria, su equipo y sus recuerdos. Úsalos por defecto (p. ej. «¿qué tiempo hace?» = en su \
+ciudad, sin preguntar; get_weather sin 'city'). Si falta un dato, búscalo con recall antes de preguntar. El \
+nombre del usuario es una persona, nunca un lugar. Responde siempre en español.
 - Tareas pendientes del usuario: create_task / list_tasks / update_task.
 - Rutas relativas se guardan en el workspace de JARVIS. Solo tienes acceso a las carpetas autorizadas \
 (list_allowed_folders).

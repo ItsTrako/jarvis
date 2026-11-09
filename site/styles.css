@@ -78,6 +78,10 @@ body::after {
 .nav-links { display: flex; gap: 4px; margin-left: auto; }
 .nav-links a { padding: 8px 14px; border-radius: 99px; font-size: 14px; color: var(--muted); transition: color 0.2s, background 0.2s; }
 .nav-links a:hover { color: var(--ink); background: var(--surface-2); }
+.lang { display: inline-flex; padding: 3px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); }
+.lang a { padding: 5px 11px; border-radius: 99px; font: 500 12.5px var(--mono); color: var(--muted); transition: color 0.2s, background 0.2s; }
+.lang a:hover { color: var(--ink); }
+.lang a[aria-current="true"] { color: #fff; background: rgb(168 85 247 / 0.22); }
 
 /* Botones */
 .btn {
@@ -320,7 +324,10 @@ pre .c { color: var(--faint); }
   .orb-wrap { width: min(100%, 460px); }
   .security, .install-grid { grid-template-columns: 1fr; }
   .nav-links { display: none; }
-  .nav .btn { margin-left: auto; }
+  .nav .lang { margin-left: auto; }
+  .nav { gap: 12px; }
+  .nav > .btn-sm { width: 40px; padding: 0; font-size: 0; gap: 0; }  /* solo el icono de GitHub */
+  .nav > .btn-sm i { font-size: 19px; }
 }
 @media (max-width: 640px) {
   .bento { grid-template-columns: 1fr; }

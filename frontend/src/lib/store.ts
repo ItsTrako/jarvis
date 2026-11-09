@@ -265,6 +265,9 @@ export const useJarvis = create<State>((set, getState) => ({
       case "memory_changed":
         bump("memory");
         break;
+      case "memory_learned":
+        getState().toast({ title: "Lo tendré en cuenta", message: (ev.facts ?? []).join(" · "), tone: "info" });
+        break;
       case "tasks_changed":
         bump("tasks");
         break;

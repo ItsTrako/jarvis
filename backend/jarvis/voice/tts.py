@@ -41,6 +41,11 @@ def clean_for_speech(text: str) -> str:
     t = re.sub(r"[*_~>#]+", "", t)
     t = re.sub(r"\n{2,}", ". ", t)
     t = re.sub(r"\s+", " ", t)
+    if get_config().user.language.startswith("es"):
+        # Cifras, unidades y fechas a palabras: si no, las voces multilingües las leen en inglés
+        from .hablar import normalizar
+
+        t = normalizar(t)
     return t.strip()
 
 

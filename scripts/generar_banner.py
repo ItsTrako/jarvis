@@ -62,12 +62,31 @@ def b64(path: Path) -> str:
     return base64.b64encode(path.read_bytes()).decode()
 
 
-def build_svg(orb_webp: bytes) -> str:
+TEXTOS = {
+    "es": {"aria": "J.A.R.V.I.S. Asistente personal de IA para Windows",
+           "eyebrow": "ASISTENTE PERSONAL DE IA PARA WINDOWS",
+           "l1": "Habla con tu PC. Voz siempre activa, memoria", "l2": "y control total, con Claude o con IA local.",
+           "chips": ["Claude Opus", "IA local con Ollama", "Voz 24/7", "Telegram"], "online": "en línea",
+           "s_eyebrow": "Asistente personal de IA para Windows",
+           "s_text": "Habla con tu PC. Voz siempre activa, memoria y control total, con Claude o con IA local.",
+           "s_chips": ["Claude Opus", "Ollama local", "Voz 24/7", "Telegram"]},
+    "en": {"aria": "J.A.R.V.I.S. Personal AI assistant for Windows",
+           "eyebrow": "PERSONAL AI ASSISTANT FOR WINDOWS",
+           "l1": "Talk to your PC. Always-on voice, memory", "l2": "and full control, with Claude or local AI.",
+           "chips": ["Claude Opus", "Local AI with Ollama", "Voice 24/7", "Telegram"], "online": "online",
+           "s_eyebrow": "Personal AI assistant for Windows",
+           "s_text": "Talk to your PC. Always-on voice, memory and full control, with Claude or local AI.",
+           "s_chips": ["Claude Opus", "Local Ollama", "Voice 24/7", "Telegram"]},
+}
+
+
+def build_svg(orb_webp: bytes, lang: str = "es") -> str:
+    T = TEXTOS[lang]
     sg = b64(SITE / "fonts" / "space-grotesk-latin-wght-normal.woff2")
     jb = b64(SITE / "fonts" / "jetbrains-mono-latin-400-normal.woff2")
     orb = base64.b64encode(orb_webp).decode()
     cx, cy = 968, 220
-    chips = ["Claude Opus", "IA local con Ollama", "Voz 24/7", "Telegram"]
+    chips = T["chips"]
     x, chip_svg = 0, []
     for i, c in enumerate(chips):
         w = 24 + len(c) * 8.4
@@ -81,7 +100,7 @@ def build_svg(orb_webp: bytes) -> str:
         f'<rect x="{i * 6}" y="-9" width="3" height="18" rx="1.5" fill="#a855f7" class="bar" '
         f'style="animation-delay:{(i * 0.13) % 0.9:.2f}s;animation-duration:{0.8 + (i % 3) * 0.17:.2f}s"/>'
         for i in range(9))
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440" width="1280" height="440" role="img" aria-label="J.A.R.V.I.S. Asistente personal de IA para Windows">
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440" width="1280" height="440" role="img" aria-label="{T['aria']}">
 <defs>
 <style>
 @font-face{{font-family:SG;src:url(data:font/woff2;base64,{sg}) format("woff2");font-weight:300 700}}
@@ -138,16 +157,16 @@ def build_svg(orb_webp: bytes) -> str:
 <g class="breathe"><image x="{cx - 260}" y="{cy - 260}" width="520" height="520" href="data:image/webp;base64,{orb}"/></g>
 </g>
 <g transform="translate(88 0)">
-<g class="up" style="animation-delay:.05s"><text x="0" y="124" class="m" font-size="13" letter-spacing="3.2" fill="#a594d6">ASISTENTE PERSONAL DE IA PARA WINDOWS</text></g>
+<g class="up" style="animation-delay:.05s"><text x="0" y="124" class="m" font-size="13" letter-spacing="3.2" fill="#a594d6">{T['eyebrow']}</text></g>
 <g class="up" style="animation-delay:.15s"><text x="-4" y="214" class="t" font-size="96" font-weight="600" letter-spacing="-3" fill="url(#title)">J.A.R.V.I.S.</text></g>
 <g class="up" style="animation-delay:.3s">
-<text x="0" y="262" class="t" font-size="23" font-weight="400" fill="#cbc2e6">Habla con tu PC. Voz siempre activa, memoria</text>
-<text x="0" y="294" class="t" font-size="23" font-weight="400" fill="#cbc2e6">y control total, con Claude o con IA local.</text>
+<text x="0" y="262" class="t" font-size="23" font-weight="400" fill="#cbc2e6">{T['l1']}</text>
+<text x="0" y="294" class="t" font-size="23" font-weight="400" fill="#cbc2e6">{T['l2']}</text>
 </g>
 <g transform="translate(0 330)">{"".join(chip_svg)}</g>
 <g transform="translate(0 398)"><g class="up" style="animation-delay:.9s">
 <circle class="ping" cx="5" cy="0" r="4.5" fill="#6ee7b7"/><circle cx="5" cy="0" r="4.5" fill="#6ee7b7"/>
-<text x="20" y="5" class="m" font-size="13" fill="#8f84b0">en línea</text>
+<text x="20" y="5" class="m" font-size="13" fill="#8f84b0">{T['online']}</text>
 <g transform="translate(96 0)">{bars}</g>
 </g></g>
 </g>
@@ -183,20 +202,23 @@ p{margin:26px 0 0;font:400 27px/1.45 IN,sans-serif;color:#cbc2e6;letter-spacing:
 <div class="ring" style="width:600px;height:600px;left:690px;top:20px"></div>
 <div class="ring" style="width:680px;height:680px;left:650px;top:-20px;border-style:dashed;opacity:.6"></div>
 <img src="%(orb)s">
-<div class="t"><div class="e">Asistente personal de IA para Windows</div><h1>J.A.R.V.I.S.</h1>
-<p>Habla con tu PC. Voz siempre activa, memoria y control total, con Claude o con IA local.</p>
-<div class="c"><span>Claude Opus</span><span>Ollama local</span><span>Voz 24/7</span><span>Telegram</span></div></div>
+<div class="t"><div class="e">%(s_eyebrow)s</div><h1>J.A.R.V.I.S.</h1>
+<p>%(s_text)s</p>
+<div class="c">%(s_chips)s</div></div>
 <div class="u">github.com/ItsTrako/jarvis</div>
 </div></body></html>"""
 
 
-def render_social(orb: Image.Image) -> None:
+def render_social(orb: Image.Image, lang: str = "es") -> None:
     from playwright.sync_api import sync_playwright
 
     buf = io.BytesIO()
     orb.save(buf, "PNG")
     page = SITE / "_social.html"
-    page.write_text(SOCIAL % {"bg": BG, "orb": "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()},
+    T = TEXTOS[lang]
+    page.write_text(SOCIAL % {"bg": BG, "orb": "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode(),
+                              "s_eyebrow": T["s_eyebrow"], "s_text": T["s_text"],
+                              "s_chips": "".join(f"<span>{c}</span>" for c in T["s_chips"])},
                     encoding="utf-8")
     srv = serve()
     try:
@@ -211,7 +233,7 @@ def render_social(orb: Image.Image) -> None:
     finally:
         page.unlink(missing_ok=True)
         srv.shutdown()
-    Image.open(io.BytesIO(png)).convert("RGB").save(OUT / "social.png", optimize=True)
+    Image.open(io.BytesIO(png)).convert("RGB").save(OUT / ("social.png" if lang == "es" else f"social-{lang}.png"), optimize=True)
 
 
 def main() -> None:
@@ -224,11 +246,12 @@ def main() -> None:
     small = orb.resize((520, 520), Image.LANCZOS)
     buf = io.BytesIO()
     small.save(buf, "WEBP", quality=86, method=6)
-    svg = build_svg(buf.getvalue())
-    assert "—" not in svg and "–" not in svg
-    (OUT / "banner.svg").write_text(svg, encoding="utf-8")
-    render_social(orb)
-    print(f"  OK nucleo.png, icono.png, banner.svg ({len(svg.encode()) / 1024:.0f} KB), social.png")
+    for lang in TEXTOS:
+        svg = build_svg(buf.getvalue(), lang)
+        assert "—" not in svg and "–" not in svg
+        (OUT / ("banner.svg" if lang == "es" else f"banner-{lang}.svg")).write_text(svg, encoding="utf-8")
+        render_social(orb, lang)
+    print("  OK nucleo.png, icono.png, banner.svg, banner-en.svg, social.png, social-en.png")
 
 
 if __name__ == "__main__":

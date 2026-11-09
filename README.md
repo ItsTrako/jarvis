@@ -2,6 +2,8 @@
   <img src=".github/assets/banner.svg" width="100%" alt="J.A.R.V.I.S., asistente personal de IA para Windows">
 </p>
 
+<p align="center"><b>Español</b> &nbsp;·&nbsp; <a href="README.en.md">English</a></p>
+
 <p align="center">
   <a href="#instalación"><img alt="Windows 10 y 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-a855f7?style=flat-square&labelColor=1a1030&logo=windows11&logoColor=c4b5fd"></a>
   <img alt="Python 3.12" src="https://img.shields.io/badge/Python-3.12-a855f7?style=flat-square&labelColor=1a1030&logo=python&logoColor=c4b5fd">
@@ -59,6 +61,7 @@ algo falla, busca otra vía antes de responder. Nunca da por hecho lo que no ha 
 
 | Además | |
 |---|---|
+| **Te conoce** | Detecta tu ciudad y tu zona horaria y aprende de lo que le cuentas, para no preguntarte dos veces. |
 | **Memoria persistente** | Recuerda preferencias, proyectos y tareas entre conversaciones, siempre en tu equipo. |
 | **Telegram** | Bot privado emparejado con tu cuenta. Las acciones delicadas se aprueban con PIN. |
 | **Rutinas y segundo plano** | «Cada día a las 8:30 envíame mis tareas y el tiempo». Trabajos largos que te avisan al terminar. |

@@ -22,6 +22,7 @@ from fastapi import FastAPI, File, HTTPException, Request, UploadFile, WebSocket
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel
 
+from . import userinfo
 from . import __version__, db, store, sysmon
 from .agent.core import agent, to_display
 from .agent.jobs import compute_next_run, jobs, scheduler
@@ -54,6 +55,7 @@ async def lifespan(app: FastAPI):
         from .voice import stt
         asyncio.create_task(stt.warmup())
     asyncio.create_task(_warm_local_model())
+    asyncio.create_task(userinfo.refresh())  # ubicación y datos del equipo, sin hacer esperar al arranque
     from .voice.assistant import voice_assistant
 
     if get_config().voice.wake_word_enabled:
@@ -185,6 +187,17 @@ def _assistant_info() -> dict:
 @app.get("/api/system")
 async def system():
     return await asyncio.to_thread(sysmon.snapshot, True)
+
+
+@app.get("/api/userinfo")
+async def api_userinfo():
+    return {"perfil": await userinfo.get(), "ubicacion": await userinfo.location()}
+
+
+@app.post("/api/userinfo/refresh")
+async def api_userinfo_refresh():
+    await userinfo.refresh(force=True)
+    return {"perfil": await userinfo.get(), "ubicacion": await userinfo.location()}
 
 
 @app.get("/api/doctor")

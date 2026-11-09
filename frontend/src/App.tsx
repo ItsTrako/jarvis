@@ -29,6 +29,18 @@ export default function App() {
   const page = useJarvis((s) => s.page);
 
   useEffect(() => {
+    // Una sola ventana de JARVIS: al abrirse una nueva, las anteriores se cierran solas
+    // (window.close solo afecta a ventanas de app; una pestaña normal del navegador lo ignora).
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel("jarvis-ventana");
+      const born = Date.now();
+      channel.onmessage = (e) => { if (e.data?.type === "nueva" && e.data.born > born) window.close(); };
+      channel.postMessage({ type: "nueva", born });
+    } catch { /* navegador sin BroadcastChannel */ }
+  }, []);
+
+  useEffect(() => {
     const st = useJarvis.getState();
     void st.refreshStatus(true);
     void st.loadConversation(st.conversationId);
